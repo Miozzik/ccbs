@@ -1,0 +1,8 @@
+merzlov.org:22  "merzlov_router"    Login:pass enable: cisco
+merzlov.net     "Мой роутер"        Login:pass enable: cisco
+127.0.0.1       ""                  Login:pass enable: cisco
+127.0.0.1:5555  "Name"              Login:pass enable: cisco
+route.merzlov.org:22   "Name"       Login:pass enable: cisco
+127.0.0.1:22     "Name"             Login:pass enable: cisco
+127.0.0.1:22    "Name"              Login:pass enable: cisco
+127.0.0.1:22    "Name"              Login:pass enable: cisco
