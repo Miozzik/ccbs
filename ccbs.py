@@ -65,5 +65,6 @@ for readoneline in open_client_list:
 
     print(f"Устройство {hostname} готово")
     os.chdir("..")
-
-#print("Готово :)")
+    os.chdir("..")
+os.remove(".temp_ccbs")
+print("Готово :)")
