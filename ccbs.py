@@ -2,20 +2,21 @@ import os
 import re
 import paramiko
 import time
+import getpass
 from datetime import date
 
-# Создаём директорию для бэкапа
 
+# Создаём директорию для бэкапа
 if not os.path.isdir("Backup"):
     os.mkdir("Backup")
 os.chdir("Backup")
 current_date = str(date.today())
 if not os.path.isdir(current_date):
     os.mkdir(current_date)
-
 os.chdir("..")
 
-temp_file = open(".temp_ccbs", "w", encoding = "utf-8")
+temp_file = open(".temp_ccbs", "w", encoding="utf-8")
+
 open_client_list = open("client_list.txt", encoding="utf-8").readlines()
 for readoneline in open_client_list:
     readoneline = readoneline.strip()
@@ -26,7 +27,8 @@ for readoneline in open_client_list:
     enable_password = re.search(r"enable: (\S*)", readoneline).group(1)
     ssh_user, ssh_password = re.search(r'.+\s(\w+):(\S+)', readoneline).group(1, 2)
     print(f"Подключаемся к: {device_name}")
-    client = paramiko.SSHClient() 
+
+    client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy)
     client.connect(
         hostname=address,
@@ -50,18 +52,16 @@ for readoneline in open_client_list:
     with open(".temp_ccbs", encoding="utf-8") as temp:
         os.chdir("Backup")
         os.chdir(current_date)
-        temp = temp.readlines()
-        #hostname = ""
-        for i in temp:
-            if not i.startswith("!") and not i.startswith("\n"):
-                if i.startswith("hostname"):
-                    hostname = (re.search(r"hostname (\S*)", i).group(1))
+
+        hostname = (re.findall(r"hostname (\S*)", temp.read()).group(1))
+
         with open(hostname, "w+", encoding="utf-8") as result_file:
-            for i in temp[1:-1]:
+            for i in temp[1:-1].readlines():
                 if not i.startswith("!") and not i.startswith("\n"):
                     if i == "end":
                         break
                     result_file.write(i)
+
 
     print(f"Устройство {hostname} готово")
     os.chdir("..")
