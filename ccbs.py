@@ -17,11 +17,9 @@ os.chdir("..")
 
 open_client_list = open("client_list.txt", encoding="utf-8").readlines()
 
-if len(open_client_list) < 22:
-    ssh_user = input("Логин SSH: ")
-    ssh_password = getpass.getpass("Пароль SSH: ")
-    enable_password = getpass.getpass("Пароль Пароль для enable: ")
-
+ssh_user = None
+ssh_password = None
+enable_password = None
 
 for readoneline in open_client_list:
     readoneline = readoneline.strip()
@@ -33,6 +31,12 @@ for readoneline in open_client_list:
         enable_password = re.search(r"enable: (\S*)", readoneline).group(1)
         ssh_user, ssh_password = re.search(r'.+\s(\w+):(\S+)', readoneline).group(1, 2)
         print(f"Подключаемся к: {device_name}")
+    elif not ssh_user or not ssh_password or not enable_password and len(readoneline) < 22:
+        ssh_user = input("Логин SSH: ")
+        ssh_password = getpass.getpass("Пароль SSH: ")
+        enable_password = getpass.getpass("Пароль Пароль для enable: ")
+        address, port = readoneline.split(":")
+        print(f"Подключаемся к: {address}")
     else:
         address, port = readoneline.split(":")
         print(f"Подключаемся к: {address}")
